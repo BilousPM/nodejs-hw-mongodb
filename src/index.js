@@ -1,4 +1,3 @@
-const message = 'hello world';
+import { setupServer } from './server.js';
 
-console.log('Hello world');
-ати;
+setupServer();

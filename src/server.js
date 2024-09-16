@@ -7,8 +7,9 @@ import {
   notFoundMiddleware,
   errorHandlerMiddleware,
 } from './middlewares/index.js';
+import { getAllContacts, getContactsById } from './services/contacts.js';
 
-const PORT = env(ENV_VARS.PORT, 3001);
+const PORT = env(ENV_VARS.PORT, 3000);
 
 export const setupServer = () => {
   const app = express();
@@ -28,6 +29,22 @@ export const setupServer = () => {
   app.get('/', (req, res) => {
     res.json({
       message: 'Hello World',
+    });
+  });
+
+  app.get('/contacts', async (req, res) => {
+    const contacts = await getAllContacts();
+    res.status(200).json({
+      contacts,
+    });
+  });
+
+  app.get('/contacts/:contactId', async (req, res) => {
+    const { contactId } = req.params;
+
+    const contact = await getContactsById(contactId);
+    res.status(200).json({
+      contact,
     });
   });
 

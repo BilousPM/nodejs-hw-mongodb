@@ -3,9 +3,9 @@ import express from 'express';
 import cors from 'cors';
 import { env } from './utils/env.js';
 import { ENV_VARS } from './constants/index.js';
-import contactRouter from './routes/contacts.js';
 import { errorHandler } from './middlewares/errorHandler.js';
 import { notFoundHandler } from './middlewares/notFoundHandler.js';
+import router from './routes/index.js';
 
 const PORT = env(ENV_VARS.PORT, 3000);
 
@@ -30,7 +30,7 @@ export const setupServer = () => {
     });
   });
 
-  app.use('/contacts', contactRouter);
+  app.use(router);
 
   app.use('*', notFoundHandler);
 

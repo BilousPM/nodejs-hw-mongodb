@@ -1,4 +1,4 @@
-import { model, Schema } from 'express';
+import { model, Schema } from 'mongoose';
 
 const SessionSchema = new Schema(
   {

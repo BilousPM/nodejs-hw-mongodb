@@ -29,6 +29,8 @@ export const loginUser = async (userData) => {
 
   if (!isEqual) throw createHttpError(401, 'Invalid password');
 
+  await SessionsCollection.deleteOne({ userId: user._id });
+
   const session = await SessionsCollection.create({
     userId: user._id,
     accessToken: randomBytes(30).toString('base64'),
@@ -37,4 +39,8 @@ export const loginUser = async (userData) => {
     refreshTokenValidUntil: new Date(Date.now() + VALID_TIME.ONE_DAY),
   });
   return session;
+};
+
+export const logoutUser = async (sessionId) => {
+  await SessionsCollection.deleteOne({ _id: sessionId });
 };

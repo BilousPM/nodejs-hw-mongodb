@@ -5,6 +5,7 @@ import { validateBody } from '../middlewares/validateBody.js';
 import { ctrlWrapper } from '../utils/ctrlWrapper.js';
 import {
   loginUserController,
+  logoutUserController,
   registerUserController,
 } from '../controllers/ayth.js';
 
@@ -21,7 +22,8 @@ authRouter.post(
   validateBody(loginUserSchema),
 );
 
-authRouter.post('/logout', validateBody(registerUserSchema));
+authRouter.post('/logout', ctrlWrapper(logoutUserController));
+
 authRouter.post('/refresh', validateBody(registerUserSchema));
 
 export default authRouter;

@@ -14,17 +14,5 @@ export const SORT_ORDER = {
   DESC: 'desc',
 };
 
-// export const VALID_TIME = {
-//   FIFTIN_MINUTES: 15 * 60 * 1000,
-//   ONE_DAY: 24 * 60 * 60 * 1000,
-// };
-
-export const VALID_TIME = {
-  FIFTIN_MINUTES: 1000,
-  ONE_DAY: 24 * 60 * 60 * 1000,
-};
-
-// export const VALID_TIME = {
-//   FIFTIN_MINUTES: 15 * 60 * 1000,
-//   ONE_DAY: 1000,
-// };
+export const accessTokenLifeTime = 1000 * 60 * 15; // 15 min
+export const refreshTokenLifeTime = 1000 * 60 * 60 * 24 * 30; // 30 days

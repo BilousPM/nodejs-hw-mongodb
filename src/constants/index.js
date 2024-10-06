@@ -14,7 +14,17 @@ export const SORT_ORDER = {
   DESC: 'desc',
 };
 
+// export const VALID_TIME = {
+//   FIFTIN_MINUTES: 15 * 60 * 1000,
+//   ONE_DAY: 24 * 60 * 60 * 1000,
+// };
+
 export const VALID_TIME = {
-  FIFTIN_MINUTES: 15 * 60 * 1000,
+  FIFTIN_MINUTES: 1000,
   ONE_DAY: 24 * 60 * 60 * 1000,
 };
+
+// export const VALID_TIME = {
+//   FIFTIN_MINUTES: 15 * 60 * 1000,
+//   ONE_DAY: 1000,
+// };

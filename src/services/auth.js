@@ -31,16 +31,33 @@ export const loginUser = async (userData) => {
 
   await SessionsCollection.deleteOne({ userId: user._id });
 
-  const session = await SessionsCollection.create({
+  return await SessionsCollection.create({
     userId: user._id,
     accessToken: randomBytes(30).toString('base64'),
     refreshToken: randomBytes(30).toString('base64'),
     accessTokenValidUntil: new Date(Date.now() + VALID_TIME.FIFTIN_MINUTES),
     refreshTokenValidUntil: new Date(Date.now() + VALID_TIME.ONE_DAY),
   });
-  return session;
 };
 
 export const logoutUser = async (sessionId) => {
+  console.log(sessionId);
   await SessionsCollection.deleteOne({ _id: sessionId });
+};
+
+export const refreshSession = async ({ sessionId, refreshToken }) => {
+  const session = await SessionsCollection.findOne({
+    _id: sessionId,
+    refreshToken,
+  });
+
+  if (!session) {
+    throw createHttpError(401, 'Session not found');
+  }
+
+  const now = new Date();
+
+  if (session.refreshTokenValidUntil < now) {
+    throw createHttpError(401, 'Session token expired');
+  }
 };

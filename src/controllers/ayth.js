@@ -1,6 +1,11 @@
 import { VALID_TIME } from '../constants/index.js';
 
-import { loginUser, logoutUser, registerUser } from '../services/auth.js';
+import {
+  loginUser,
+  logoutUser,
+  refreshSession,
+  registerUser,
+} from '../services/auth.js';
 
 export const registerUserController = async (req, res) => {
   const userData = req.body;
@@ -31,7 +36,7 @@ export const loginUserController = async (req, res) => {
 
   res.status(200).json({
     status: 200,
-    message: 'saccessfully loged in a user',
+    message: 'Saccessfully loged in a user',
     data: { accessToken: session.accessToken },
   });
 };
@@ -44,4 +49,20 @@ export const logoutUserController = async (req, res) => {
   res.clearCookie('sessionId');
   res.clearCookie('refreshToken');
   res.status(204).send();
+};
+
+export const refreshUserSessionController = async (req, res) => {
+  console.log(req.cookies.sessionId);
+  console.log(req.cookies.refreshToken);
+  const session = await refreshSession({
+    refreshToken: req.cookies.refreshToken,
+    sessionId: req.cookies.sessionId,
+  });
+  res.status(200).json({
+    status: 200,
+    message: 'Successfully refreshed a session!',
+    data: {
+      accessToken: session,
+    },
+  });
 };

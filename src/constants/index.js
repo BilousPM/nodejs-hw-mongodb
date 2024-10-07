@@ -16,3 +16,4 @@ export const SORT_ORDER = {
 
 export const accessTokenLifeTime = 1000 * 60 * 15; // 15 min
 export const refreshTokenLifeTime = 1000 * 60 * 60 * 24 * 30; // 30 days
+// export const refreshTokenLifeTime = 1000; // 1 sek

@@ -1,4 +1,3 @@
-import createHttpError from 'http-errors';
 import { UserCollection } from '../db/models/auth.js';
 import bcrypt from 'bcrypt';
 import { randomBytes } from 'crypto';
@@ -22,41 +21,22 @@ export const createSession = async (userId) => {
 
   const accessToken = randomBytes(30).toString('base64');
   const refreshToken = randomBytes(30).toString('base64');
-  const accessTokenValidUntil = Date.now() + accessTokenLifeTime;
-  const refreshTokenValidUntil = Date.now() + refreshTokenLifeTime;
 
   return SessionsCollection.create({
     userId,
     accessToken,
     refreshToken,
-    accessTokenValidUntil,
-    refreshTokenValidUntil,
+    accessTokenValidUntil: new Date(Date.now() + accessTokenLifeTime),
+    refreshTokenValidUntil: new Date(Date.now() + refreshTokenLifeTime),
   });
 };
 
-export const logoutUser = (sessionId) =>
+export const deleteSession = (sessionId) =>
   SessionsCollection.deleteOne({ _id: sessionId });
 
-// ----------------------------------------
-
-// export const refreshSession = async ({ sessionId, refreshToken }) => {
-//   const session = await SessionsCollection.findOne({
-//     _id: sessionId,
-//     refreshToken,
-//   });
-
-//   if (!session) {
-//     throw createHttpError(401, 'Session not found');
-//   }
-
-//   const now = new Date();
-
-//   if (session.refreshTokenValidUntil < now) {
-//     throw createHttpError(401, 'Session token expired');
-//   }
-// };
-
-// -------  Additional servises  ----------
+export const findSessionById = (sessionId, refreshToken) => {
+  return SessionsCollection.findOne({ _id: sessionId, refreshToken });
+};
 
 export const findUserByEmail = (email) => UserCollection.findOne({ email });
 

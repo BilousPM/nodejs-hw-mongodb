@@ -1,5 +1,4 @@
 import createHttpError from 'http-errors';
-
 import {
   createContact,
   deleteContactById,
@@ -11,6 +10,7 @@ import { parsedPaginationParams } from '../utils/parsePaginationParams.js';
 import { parseSortParams } from '../utils/parseSortParams.js';
 import { parseFilterParams } from '../utils/parseFilterParams.js';
 
+// ---- Get all contacts
 export const getAllContactsController = async (req, res) => {
   const { page, perPage } = parsedPaginationParams(req.query);
   const { sortBy, sortOrder } = parseSortParams(req.query);
@@ -31,6 +31,7 @@ export const getAllContactsController = async (req, res) => {
   });
 };
 
+// ---- Get by Id contact
 export const getContactByIDController = async (req, res) => {
   const { contactId } = req.params;
 
@@ -47,6 +48,7 @@ export const getContactByIDController = async (req, res) => {
   });
 };
 
+// ---- Create contact
 export const createContactController = async (req, res) => {
   const newContact = await createContact(req.body);
 
@@ -57,6 +59,7 @@ export const createContactController = async (req, res) => {
   });
 };
 
+// ----Update contact
 export const updateContactController = async (req, res) => {
   const { contactId } = req.params;
   const { body } = req;
@@ -71,6 +74,7 @@ export const updateContactController = async (req, res) => {
   });
 };
 
+// Delete contact
 export const deleteContactController = async (req, res) => {
   const { contactId } = req.params;
   const deletedContact = await deleteContactById(contactId);

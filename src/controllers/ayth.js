@@ -1,6 +1,5 @@
 import createHttpError from 'http-errors';
 import bcrypt from 'bcrypt';
-import { refreshTokenLifeTime } from '../constants/index.js';
 import {
   findSessionById,
   createSession,

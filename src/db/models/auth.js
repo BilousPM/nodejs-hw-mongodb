@@ -11,10 +11,12 @@ const userSchema = new Schema(
   },
 );
 
+export const UserCollection = model('users', userSchema);
+
+// --- method to remove the password field from the response object ---
+
 // userSchema.methods.toJSON = function () {
 //   const obj = this.toObject();
 //   delete obj.password;
 //   return obj;
 // };
-
-export const UserCollection = model('users', userSchema);

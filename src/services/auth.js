@@ -9,35 +9,41 @@ import {
 
 export const registerUser = async (userData) => {
   const password = await bcrypt.hash(userData.password, 10);
-
   return await UserCollection.create({
     ...userData,
     password,
   });
 };
 
+export const findUserByEmail = (email) => UserCollection.findOne({ email });
+
+export const findUserById = (userId) => UserCollection.findById(userId);
+
 export const createSession = async (userId) => {
-  SessionsCollection.deleteOne({ userId });
+  await SessionsCollection.deleteOne({ userId });
 
   const accessToken = randomBytes(30).toString('base64');
   const refreshToken = randomBytes(30).toString('base64');
+  const accessTokenValidUntil = new Date(Date.now() + accessTokenLifeTime);
+  const refreshTokenValidUntil = new Date(Date.now() + refreshTokenLifeTime);
 
   return SessionsCollection.create({
     userId,
     accessToken,
     refreshToken,
-    accessTokenValidUntil: new Date(Date.now() + accessTokenLifeTime),
-    refreshTokenValidUntil: new Date(Date.now() + refreshTokenLifeTime),
+    accessTokenValidUntil,
+    refreshTokenValidUntil,
   });
 };
 
 export const deleteSession = (sessionId) =>
   SessionsCollection.deleteOne({ _id: sessionId });
 
-export const findSessionById = (sessionId, refreshToken) => {
-  return SessionsCollection.findOne({ _id: sessionId, refreshToken });
+export const findSessionById = (sessionId, refreshToken) =>
+  SessionsCollection.findOne({ _id: sessionId, refreshToken });
+
+export const findSessionByToken = (token) => {
+  return SessionsCollection.findOne({
+    accessToken: token,
+  });
 };
-
-export const findUserByEmail = (email) => UserCollection.findOne({ email });
-
-export const findUserById = (userId) => UserCollection.findById(userId);

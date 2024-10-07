@@ -8,8 +8,7 @@ import {
   deleteSession,
   registerUser,
 } from '../services/auth.js';
-
-const setupSession = (res, session) => {};
+import { setupSessionCookies } from '../utils/setupSessionCookies.js';
 
 // ---- User register
 export const registerUserController = async (req, res) => {
@@ -40,14 +39,7 @@ export const loginUserController = async (req, res) => {
 
   const session = await createSession(user._id);
 
-  res.cookie('refreshToken', session.refreshToken, {
-    httpOnly: true,
-    expires: new Date(Date.now() + refreshTokenLifeTime),
-  });
-  res.cookie('sessionId', session._id, {
-    httpOnly: true,
-    expires: new Date(Date.now() + refreshTokenLifeTime),
-  });
+  setupSessionCookies(res, session);
 
   res.json({
     status: 200,
@@ -84,16 +76,7 @@ export const refreshUserSessionController = async (req, res) => {
   }
 
   const newSession = await createSession(session.userId);
-
-  res.cookie('refreshToken', newSession.refreshToken, {
-    httpOnly: true,
-    expires: new Date(Date.now() + refreshTokenLifeTime),
-  });
-  res.cookie('sessionId', newSession._id, {
-    httpOnly: true,
-    expires: new Date(Date.now() + refreshTokenLifeTime),
-  });
-
+  setupSessionCookies(res, newSession);
   await deleteSession(sessionId);
 
   res.json({

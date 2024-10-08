@@ -32,7 +32,7 @@ export const getAllContactsController = async (req, res) => {
   });
 };
 
-// ---- Get by Id contact
+// ---- Get contact by Id
 export const getContactByIDController = async (req, res) => {
   const { contactId } = req.params;
 
@@ -60,7 +60,7 @@ export const createContactController = async (req, res) => {
   });
 };
 
-// ----Update contact
+// ---- Update contact
 export const updateContactController = async (req, res) => {
   const { contactId } = req.params;
   const { body } = req;
@@ -75,7 +75,7 @@ export const updateContactController = async (req, res) => {
   });
 };
 
-// Delete contact
+// ---- Delete contact
 export const deleteContactController = async (req, res) => {
   const { contactId } = req.params;
   const deletedContact = await deleteContactById(contactId, req.user._id);

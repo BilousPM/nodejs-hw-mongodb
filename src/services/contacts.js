@@ -8,10 +8,11 @@ export const getAllContacts = async ({
   sortOrder = SORT_ORDER.ASC,
   sortBy = 'name',
   filter = {},
+  userId,
 }) => {
   const skip = (page - 1) * perPage;
 
-  const contactQuery = contactsModel.find();
+  const contactQuery = contactsModel.find({ userId });
 
   if (filter.contactType) {
     contactQuery.where('contactType').equals(filter.contactType);
@@ -40,14 +41,15 @@ export const getAllContacts = async ({
   };
 };
 
-export const getContactsById = (contactId) => contactsModel.findById(contactId);
+export const getContactsById = (contactId, userId) =>
+  contactsModel.findOne({ _id: contactId, userId });
 
 export const createContact = (contactData) => contactsModel.create(contactData);
 
-export const updateContact = (contactId, contactData) =>
-  contactsModel.findOneAndUpdate({ _id: contactId }, contactData, {
+export const updateContact = (contactId, contactData, userId) =>
+  contactsModel.findOneAndUpdate({ _id: contactId, userId }, contactData, {
     new: true,
   });
 
-export const deleteContactById = (contactId) =>
-  contactsModel.findOneAndDelete({ _id: contactId });
+export const deleteContactById = (contactId, userId) =>
+  contactsModel.findOneAndDelete({ _id: contactId, userId });

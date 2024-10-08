@@ -42,8 +42,7 @@ export const deleteSession = (sessionId) =>
 export const findSessionById = (sessionId, refreshToken) =>
   SessionsCollection.findOne({ _id: sessionId, refreshToken });
 
-export const findSessionByToken = (token) => {
-  return SessionsCollection.findOne({
+export const findSessionByToken = (token) =>
+  SessionsCollection.findOne({
     accessToken: token,
   });
-};

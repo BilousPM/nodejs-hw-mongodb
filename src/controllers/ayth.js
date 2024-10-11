@@ -9,6 +9,10 @@ import {
 } from '../services/auth.js';
 import { setupSessionCookies } from '../utils/setupSessionCookies.js';
 
+import { sendEmailRequest } from '../utils/sendMail.js';
+import { SMTP } from '../constants/index.js';
+import { env } from '../utils/env.js';
+
 // ---- User register
 export const registerUserController = async (req, res) => {
   const { email, name } = req.body;
@@ -84,5 +88,32 @@ export const refreshUserSessionController = async (req, res) => {
     data: {
       accessToken: newSession.accessToken,
     },
+  });
+};
+
+// --- Request reset token
+export const requestResetEmailController = async (req, res) => {
+  const mail = req.body.email;
+
+  const user = await findUserByEmail(mail);
+  if (!user) {
+    throw createHttpError(404, 'User not found');
+  }
+  try {
+    await sendEmailRequest({
+      to: mail,
+      from: env(SMTP.SMTP_FROM),
+      html: '<p>HELLO WORLD</p>',
+      sudject: 'reset your password',
+    });
+  } catch (error) {
+    console.log(error);
+    throw createHttpError(500, 'Error in sending email');
+  }
+
+  res.json({
+    status: 200,
+    message: 'Reset password email has been successfully sent.',
+    data: {},
   });
 };

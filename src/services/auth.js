@@ -7,6 +7,7 @@ import {
   refreshTokenLifeTime,
 } from '../constants/index.js';
 
+// ---- register user
 export const registerUser = async (userData) => {
   const password = await bcrypt.hash(userData.password, 10);
   return await UserCollection.create({
@@ -15,10 +16,13 @@ export const registerUser = async (userData) => {
   });
 };
 
+// ---- find User by email
 export const findUserByEmail = (email) => UserCollection.findOne({ email });
 
+// ---- find User by id
 export const findUserById = (userId) => UserCollection.findById(userId);
 
+// ---- create Session
 export const createSession = async (userId) => {
   await SessionsCollection.deleteOne({ userId });
 
@@ -36,13 +40,18 @@ export const createSession = async (userId) => {
   });
 };
 
+// ---- delete session
 export const deleteSession = (sessionId) =>
   SessionsCollection.deleteOne({ _id: sessionId });
 
+// ---- find session by id
 export const findSessionById = (sessionId, refreshToken) =>
   SessionsCollection.findOne({ _id: sessionId, refreshToken });
 
+// ---- find session by token
 export const findSessionByToken = (token) =>
   SessionsCollection.findOne({
     accessToken: token,
   });
+
+// ---- request reset token

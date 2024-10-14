@@ -38,6 +38,6 @@ authRouter.post(
   ctrlWrapper(requestResetEmailController),
 );
 
-authRouter.post('/reset-pwd');
+authRouter.post('/reset-password');
 
 export default authRouter;

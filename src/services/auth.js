@@ -55,3 +55,4 @@ export const findSessionByToken = (token) =>
   });
 
 // ---- request reset token
+export const requestResetToken = async (email) => {};

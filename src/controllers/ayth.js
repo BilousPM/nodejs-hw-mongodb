@@ -10,8 +10,12 @@ import {
 import { setupSessionCookies } from '../utils/setupSessionCookies.js';
 
 import { sendEmailRequest } from '../utils/sendMail.js';
-import { SMTP } from '../constants/index.js';
+import { APP_DOMAIN, SMTP, TEMPLATES_DIR } from '../constants/index.js';
 import { env } from '../utils/env.js';
+import jwt from 'jsonwebtoken';
+import path from 'node:path';
+import fs from 'node:fs/promises';
+import handlebars from 'handlebars';
 
 // ---- User register
 export const registerUserController = async (req, res) => {
@@ -93,18 +97,45 @@ export const refreshUserSessionController = async (req, res) => {
 
 // --- Request reset token
 export const requestResetEmailController = async (req, res) => {
-  const mail = req.body.email;
+  const email = req.body.email;
 
-  const user = await findUserByEmail(mail);
+  const user = await findUserByEmail(email);
   if (!user) {
     throw createHttpError(404, 'User not found');
   }
+
+  const resetToken = jwt.sign(
+    {
+      sub: user._id,
+      email,
+    },
+    env('JWT_SECRET'),
+    {
+      expiresIn: '15m',
+    },
+  );
+
+  const resetPasswordTemplatePath = path.join(
+    TEMPLATES_DIR,
+    'reset-password-email.html',
+  );
+
+  const templateSource = (
+    await fs.readFile(resetPasswordTemplatePath)
+  ).toString();
+
+  const template = handlebars.compile(templateSource);
+  const html = template({
+    name: user.name,
+    link: `${env(APP_DOMAIN)}/reset-password?token=${resetToken}`,
+  });
+
   try {
     await sendEmailRequest({
-      to: mail,
+      to: email,
       from: env(SMTP.SMTP_FROM),
-      html: '<p>HELLO WORLD</p>',
-      sudject: 'reset your password',
+      sudject: 'Reset your password',
+      html,
     });
   } catch (error) {
     console.log(error);

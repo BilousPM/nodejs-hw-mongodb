@@ -1,3 +1,5 @@
+import path from 'node:path';
+
 export const ENV_VARS = {
   PORT: 'PORT',
 };
@@ -24,3 +26,8 @@ export const SMTP = {
 
 export const accessTokenLifeTime = 1000 * 60 * 15; // 15 min
 export const refreshTokenLifeTime = 1000 * 60 * 60 * 24 * 30; // 30 days
+
+export const TEMPLATES_DIR = path.join(process.cwd(), 'src', 'templates');
+
+export const JWT_SECRET = 'JWT_SECRET';
+export const APP_DOMAIN = 'APP_DOMAIN';

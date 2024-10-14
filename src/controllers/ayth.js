@@ -6,11 +6,18 @@ import {
   findUserByEmail,
   deleteSession,
   registerUser,
+  updateUser,
+  findUserByCred,
 } from '../services/auth.js';
 import { setupSessionCookies } from '../utils/setupSessionCookies.js';
 
 import { sendEmailRequest } from '../utils/sendMail.js';
-import { APP_DOMAIN, SMTP, TEMPLATES_DIR } from '../constants/index.js';
+import {
+  APP_DOMAIN,
+  JWT_SECRET,
+  SMTP,
+  TEMPLATES_DIR,
+} from '../constants/index.js';
 import { env } from '../utils/env.js';
 import jwt from 'jsonwebtoken';
 import path from 'node:path';
@@ -111,7 +118,7 @@ export const requestResetEmailController = async (req, res) => {
     },
     env('JWT_SECRET'),
     {
-      expiresIn: '15m',
+      expiresIn: '5m',
     },
   );
 
@@ -139,12 +146,52 @@ export const requestResetEmailController = async (req, res) => {
     });
   } catch (error) {
     console.log(error);
-    throw createHttpError(500, 'Error in sending email');
+    throw createHttpError(
+      500,
+      'Failed to send the email, please try again later.',
+    );
   }
 
   res.json({
     status: 200,
     message: 'Reset password email has been successfully sent.',
+    data: {},
+  });
+};
+
+// ---- Reset Password
+export const resetPasswordController = async (req, res) => {
+  let enteries;
+  try {
+    enteries = jwt.verify(req.body.token, env(JWT_SECRET));
+  } catch (err) {
+    if (err instanceof Error)
+      throw createHttpError(401, 'Token is expired or invalid.');
+    throw err;
+  }
+
+  const user = await findUserByCred({
+    email: enteries.email,
+    _id: enteries.sub,
+  });
+
+  if (!user) {
+    throw createHttpError(404, 'User not found');
+  }
+
+  const encriptedPassword = await bcrypt.hash(req.body.password, 10);
+
+  await updateUser(user._id, encriptedPassword);
+
+  if (req.cookies.sessionId) {
+    await deleteSession(req.cookies.sessionId);
+  }
+  res.clearCookie('sessionId');
+  res.clearCookie('refreshToken');
+
+  res.json({
+    message: 'Password was successfully reset!',
+    status: 200,
     data: {},
   });
 };

@@ -16,11 +16,24 @@ export const registerUser = async (userData) => {
   });
 };
 
+//  ---- find User By Cred
+export const findUserByCred = (userData) =>
+  UserCollection.findOne({
+    email: userData.email,
+    _id: userData._id,
+  });
+
 // ---- find User by email
 export const findUserByEmail = (email) => UserCollection.findOne({ email });
 
 // ---- find User by id
 export const findUserById = (userId) => UserCollection.findById(userId);
+
+// ---- update user
+export const updateUser = (id, password) =>
+  UserCollection.findByIdAndUpdate(id, {
+    password,
+  });
 
 // ---- create Session
 export const createSession = async (userId) => {

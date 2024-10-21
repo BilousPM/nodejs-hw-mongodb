@@ -8,6 +8,7 @@ import {
   registerUser,
   updateUser,
   findUserByCred,
+  loginOrSignupWithGoogle,
 } from '../services/auth.js';
 import { setupSessionCookies } from '../utils/setupSessionCookies.js';
 
@@ -23,6 +24,7 @@ import jwt from 'jsonwebtoken';
 import path from 'node:path';
 import fs from 'node:fs/promises';
 import handlebars from 'handlebars';
+import { generateGoogleAuthUrl } from '../utils/googleOauth2.js';
 
 // ---- User register
 export const registerUserController = async (req, res) => {
@@ -91,7 +93,7 @@ export const refreshUserSessionController = async (req, res) => {
 
   const newSession = await createSession(session.userId);
   setupSessionCookies(res, newSession);
-  await deleteSession(sessionId);
+  // await deleteSession(sessionId);
 
   res.json({
     status: 200,
@@ -193,5 +195,31 @@ export const resetPasswordController = async (req, res) => {
     message: 'Password was successfully reset!',
     status: 200,
     data: {},
+  });
+};
+
+// ---- get Google OAuth Controller
+export const getGoogleOAuthController = async (req, res) => {
+  const url = generateGoogleAuthUrl();
+
+  res.json({
+    status: 200,
+    message: 'Successfully get Google OAuth url!',
+    data: {
+      url,
+    },
+  });
+};
+
+// ---- login With Google Controller
+export const loginWithGoogleController = async (req, res) => {
+  const session = await loginOrSignupWithGoogle(req.body.code);
+  setupSessionCookies(res, session);
+
+  res.json({
+    message: 'Successfully logged in via Google OAuth!',
+    data: {
+      accessToken: session.accessToken,
+    },
   });
 };

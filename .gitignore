@@ -5,3 +5,7 @@
 .vscode
 .DS_Store
 .idea
+
+
+src/temp/**
+src/uplods?/**

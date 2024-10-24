@@ -1,0 +1,22 @@
+tags:
+  - Contacts
+summary: Delete contact by ID
+operationId: deleteContact
+description: 'Delete a contact by ID by authorized user'
+security:
+  - bearerAuth: []
+parameters:
+  - in: path
+    name: id
+    required: true
+    description: MongoDB _id
+    schema:
+      type: string
+      example: '66f8ce62907b1bc9bc45a365'
+responses:
+  '204':
+    description: Delete contact by id.
+  '401':
+    $ref: ../../../components/responses/401.yaml
+  '404':
+    $ref: '../../../components/responses/404.yaml'

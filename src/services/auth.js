@@ -6,6 +6,7 @@ import {
   accessTokenLifeTime,
   refreshTokenLifeTime,
 } from '../constants/index.js';
+import { validateCode } from '../utils/googleOauth2.js';
 
 // ---- register user
 export const registerUser = async (userData) => {
@@ -16,11 +17,24 @@ export const registerUser = async (userData) => {
   });
 };
 
+//  ---- find User By Cred
+export const findUserByCred = (userData) =>
+  UserCollection.findOne({
+    email: userData.email,
+    _id: userData._id,
+  });
+
 // ---- find User by email
 export const findUserByEmail = (email) => UserCollection.findOne({ email });
 
 // ---- find User by id
 export const findUserById = (userId) => UserCollection.findById(userId);
+
+// ---- update user
+export const updateUser = (id, password) =>
+  UserCollection.findByIdAndUpdate(id, {
+    password,
+  });
 
 // ---- create Session
 export const createSession = async (userId) => {
@@ -54,4 +68,20 @@ export const findSessionByToken = (token) =>
     accessToken: token,
   });
 
-// ---- request reset token
+// ---- login Or Signup With Google
+export const loginOrSignupWithGoogle = async (code) => {
+  const { payload } = await validateCode(code);
+  let user = await UserCollection.findOne({ email: payload.email });
+
+  if (!user) {
+    const password = await bcrypt.hash(randomBytes(10), 10);
+    user = await UserCollection.create({
+      name: payload.name,
+      email: payload.email,
+      password,
+      avatarUrl: payload.pictures,
+    });
+  }
+  const newSesion = await createSession(user._id);
+  return newSesion;
+};

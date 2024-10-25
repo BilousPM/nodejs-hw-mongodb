@@ -24,7 +24,7 @@ import jwt from 'jsonwebtoken';
 import path from 'node:path';
 import fs from 'node:fs/promises';
 import handlebars from 'handlebars';
-import { generateGoogleAuthUrl } from '../utils/googleOauth2.js';
+import { generateGoogleAuthUrl } from '../utils/googleOauth.js';
 
 // ---- User register
 export const registerUserController = async (req, res) => {

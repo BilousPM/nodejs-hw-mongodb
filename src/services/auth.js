@@ -9,7 +9,7 @@ import {
 import {
   getFullnameFromGoogleTokenPayload,
   validateCode,
-} from '../utils/googleOauth2.js';
+} from '../utils/googleOauth.js';
 
 // ---- register user
 export const registerUser = async (userData) => {

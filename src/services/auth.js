@@ -6,7 +6,10 @@ import {
   accessTokenLifeTime,
   refreshTokenLifeTime,
 } from '../constants/index.js';
-import { validateCode } from '../utils/googleOauth2.js';
+import {
+  getFullnameFromGoogleTokenPayload,
+  validateCode,
+} from '../utils/googleOauth2.js';
 
 // ---- register user
 export const registerUser = async (userData) => {
@@ -76,7 +79,7 @@ export const loginOrSignupWithGoogle = async (code) => {
   if (!user) {
     const password = await bcrypt.hash(randomBytes(10), 10);
     user = await UserCollection.create({
-      name: payload.name,
+      name: getFullnameFromGoogleTokenPayload(payload),
       email: payload.email,
       password,
       avatarUrl: payload.pictures,

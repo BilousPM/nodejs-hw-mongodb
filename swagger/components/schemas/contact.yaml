@@ -3,11 +3,8 @@ required:
   - _id
   - name
   - phoneNumber
-  - email
-  - isFavorite
   - contactType
   - userId
-  - photo
 properties:
   _id:
     description: "Contacts's id"

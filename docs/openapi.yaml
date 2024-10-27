@@ -16,6 +16,8 @@ servers:
   - url: https://contacts-mx7l.onrender.com
 paths:
   /contacts:
+    post:
+      $ref: ../swagger/paths/contacts/post.yaml
     get:
       $ref: ../swagger/paths/contacts/get.yaml
 

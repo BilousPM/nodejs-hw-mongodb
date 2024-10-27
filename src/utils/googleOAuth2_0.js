@@ -26,7 +26,7 @@ export const generateGoogleAuthUrl = () =>
 export const validateCode = async (code) => {
   try {
     const response = await googleOAuthClient.getToken(code);
-    if (!response.tokens.id_token) throw createHttpError(401, 'Unauthorized');
+    // if (!response.tokens.id_token) throw createHttpError(401, 'Unauthorized');
     // const idToken = response.tokens.id_token;
     const ticket = await googleOAuthClient.verifyIdToken({
       idToken: response.tokens.id_token,

@@ -13,6 +13,7 @@ requestBody:
         required:
           - name
           - phoneNumber
+          - contactType
         properties:
           name:
             description: "Contacts's name"
@@ -34,6 +35,11 @@ requestBody:
             description: "Contacts's type"
             type: string
             enum: ['work', 'home', 'personal']
+          photo:
+            description: "Contact's photo"
+            type: string
+            format: binary
+
 responses:
   '201':
     description: Creates a contact

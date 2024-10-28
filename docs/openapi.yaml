@@ -9,8 +9,8 @@ info:
 tags:
   - name: Contacts
     description: Operations about contacts.
-  - name: Auth
-    description: Auth operations.
+  # - name: Auth
+  #   description: Auth operations.
 servers:
   - url: http://localhost:5000
   - url: https://contacts-mx7l.onrender.com

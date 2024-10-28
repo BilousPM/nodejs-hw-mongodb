@@ -21,10 +21,6 @@
     {
       "name": "Contacts",
       "description": "Operations about contacts."
-    },
-    {
-      "name": "Auth",
-      "description": "Auth operations."
     }
   ],
   "paths": {
@@ -67,7 +63,7 @@
                     "type": "string",
                     "example": "testcontact@mail.com"
                   },
-                  "isFavorite": {
+                  "isFavourite": {
                     "description": "Whether is \"Contacts favorite\"",
                     "type": "boolean",
                     "example": true
@@ -79,7 +75,8 @@
                       "work",
                       "home",
                       "personal"
-                    ]
+                    ],
+                    "example": "personal"
                   },
                   "photo": {
                     "description": "Contact's photo for avatar",
@@ -385,7 +382,7 @@
                     "type": "string",
                     "example": "testcontact@mail.com"
                   },
-                  "isFavorite": {
+                  "isFavourite": {
                     "description": "Whether is \"Contacts favorite\"",
                     "type": "boolean",
                     "example": true
@@ -397,7 +394,8 @@
                       "work",
                       "home",
                       "personal"
-                    ]
+                    ],
+                    "example": "personal"
                   },
                   "photo": {
                     "description": "Contact's photo",
@@ -538,7 +536,8 @@
               "work",
               "home",
               "personal"
-            ]
+            ],
+            "example": "personal"
           },
           "userId": {
             "description": "Contacts's user id",

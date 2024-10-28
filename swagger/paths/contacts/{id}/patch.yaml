@@ -13,7 +13,6 @@ parameters:
       type: string
       example: '66f8ce62907b1bc9bc45a365'
       description: MongoDB _id
-
 requestBody:
   content:
     multipart/form-data:
@@ -33,7 +32,7 @@ requestBody:
             description: "Contacts's email"
             type: string
             example: testcontact@mail.com
-          isFavorite:
+          isFavourite:
             description: Whether is "Contacts favorite"
             type: boolean
             example: true
@@ -41,6 +40,7 @@ requestBody:
             description: "Contacts's type"
             type: string
             enum: ['work', 'home', 'personal']
+            example: 'personal'
           photo:
             description: "Contact's photo"
             type: string
